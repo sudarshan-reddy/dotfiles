@@ -1,10 +1,35 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" Use pathogen to easily modify the runtime path to include all
-" plugins under the ~/.vim/bundle directory
-execute pathogen#infect()
-execute pathogen#helptags()
+" Specify a directory for plugins
+call plug#begin('~/.vim/plugged')
+
+
+Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'scrooloose/nerdtree'
+Plug 'kien/ctrlp.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'airblade/vim-gitgutter'
+Plug 'mileszs/ack.vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'rust-lang/rust.vim'
+Plug 'timonv/vim-cargo'
+Plug 'racer-rust/vim-racer'
+Plug 'jacoborus/tender.vim'
+Plug 'fatih/vim-go'
+Plug 'vim-syntastic/syntastic'
+Plug 'Konfekt/FastFold'
+Plug 'tmhedberg/SimpylFold'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'roxma/nvim-yarp'
+Plug 'Shougo/deoplete.nvim'
+Plug 'zchee/deoplete-go', { 'do': 'make'}
+"python
+Plug 'zchee/deoplete-jedi'
+
+" Initialize plugin system
+call plug#end()
 
 " change the mapleader from \ to ,
 let mapleader=","
@@ -41,6 +66,22 @@ set noswapfile
 set smartindent
 set wildmenu
 
+set splitbelow
+set splitright
+
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+set foldmethod=syntax  
+set foldnestmax=10
+set nofoldenable
+set foldlevel=2
+
+" Enable folding with the spacebar
+nnoremap <space> za
 nnoremap <leader><space> :nohlsearch<CR>
 
 " move vertically by visual line
@@ -59,17 +100,12 @@ filetype plugin indent on
 set t_Co=256
 syntax enable
 
-if has('gui_running')
-    set background=dark
-    let g:solarized_termcolors=256
-    colorscheme solarized 
-else
-
-    "let g:solarized_termcolors=256
-    "set background=light
-    colorscheme vividchalk
-    "let g:rehash256=1
+if (has("termguicolors"))
+ set termguicolors
 endif
+colorscheme tender
+
+" colorscheme vividchalk
 
 set laststatus=2
 set pastetoggle=<F2>
@@ -77,7 +113,6 @@ set pastetoggle=<F2>
 set colorcolumn=80
 hi ColorColumn ctermbg=235
 
-set foldenable 
 "Syntastic settings
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -119,6 +154,7 @@ au FileType go nmap <leader>t <Plug>(go-test)
 let g:syntastic_loc_list_height=3
 
 " Lint and Vet on save
+let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 let g:syntastic_go_checkers = ['go', 'golint', 'errcheck', 'govet', 'gotest']
 
 syntax enable  
@@ -133,92 +169,78 @@ let g:go_highlight_structs = 1
 let g:go_highlight_operators = 1  
 let g:go_highlight_build_constraints = 1  
 
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
+"" Use neocomplete.
+"let g:neocomplete#enable_at_startup = 1
+"" Use smartcase.
+"let g:neocomplete#enable_smart_case = 1
+"" Set minimum syntax keyword length.
+"let g:neocomplete#sources#syntax#min_keyword_length = 3
 
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds'     : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-    \ ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-    \ },
-    \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-    \ },
-    \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent'
-    \ }
+" Use deoplete
+let g:deoplete#enable_at_startup = 1
+set completeopt=longest,menuone
 
-map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-" Python specific changes
-let python_highlight_all=1
-syntax on
+" deoplete go
+let g:deoplete#sources#go#gocode_binary = '/Users/sudarshan/dev/go/bin/gocode'
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-
-let g:pymode_rope = 1
-
-" Documentation
-let g:pymode_doc = 1
-let g:pymode_doc_key = 'K'
-
-"Linting
-let g:pymode_lint = 1
-let g:pymode_lint_checker = "pyflakes,pep8"
-" Auto check on save
-let g:pymode_lint_write = 1
-
-" Support virtualenv
-let g:pymode_virtualenv = 1
-
-" Enable breakpoints plugin
-let g:pymode_breakpoint = 1
-let g:pymode_breakpoint_bind = '<leader>b'
-
-" syntax highlighting
-let g:pymode_syntax = 1
-let g:pymode_syntax_all = 1
-let g:pymode_syntax_indent_errors = g:pymode_syntax_all
-let g:pymode_syntax_space_errors = g:pymode_syntax_all
-
-" Don't autofold code
-let g:pymode_folding = 0
-
-" C specific changes
-augroup project
-    autocmd!
-    autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
-augroup END
-
-" This sets vim path to also include these directories for searching
-let &path.="src/include,/usr/include/AL,"
-
-" automate make
-set makeprg=make\ -C\ ../build\ -j9
+"let g:tagbar_type_go = {
+"    \ 'ctagstype' : 'go',
+"    \ 'kinds'     : [
+"        \ 'p:package',
+"        \ 'i:imports:1',
+"        \ 'c:constants',
+"        \ 'v:variables',
+"        \ 't:types',
+"        \ 'n:interfaces',
+"        \ 'w:fields',
+"        \ 'e:embedded',
+"        \ 'm:methods',
+"        \ 'r:constructor',
+"        \ 'f:functions'
+"    \ ],
+"    \ 'sro' : '.',
+"    \ 'kind2scope' : {
+"        \ 't' : 'ctype',
+"        \ 'n' : 'ntype'
+"    \ },
+"    \ 'scope2kind' : {
+"        \ 'ctype' : 't',
+"        \ 'ntype' : 'n'
+"    \ },
+"    \ 'ctagsbin'  : 'gotags',
+"    \ 'ctagsargs' : '-sort -silent'
+"    \ }
+"
+"map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+"map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+"nmap <F8> :TagbarToggle<CR>
 
 " rust changes
 
-let g:rustfmt_autosave = 1
+let g:rustfmt_command = '/Users/sudarshan/.cargo/bin/rustfmt'
+let g:rustfmt_command = "cargo fmt -- "
+let g:rustfmt_autosave = 1 " format Rust files on save
+let g:rustfmt_fail_silently = 1 " else rustfmt will bring cursor to bottom of window on syntax failure
 
 let g:syntastic_rust_checkers = ['cargo']
+
+let g:racer_cmd = "/Users/sudarshan/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
+
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
+
+" python changes
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 | 
+    \ set encoding=utf-8 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
