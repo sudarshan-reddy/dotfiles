@@ -185,38 +185,6 @@ set completeopt=longest,menuone
 let g:deoplete#sources#go#gocode_binary = '/Users/sudarshan/dev/go/bin/gocode'
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 
-"let g:tagbar_type_go = {
-"    \ 'ctagstype' : 'go',
-"    \ 'kinds'     : [
-"        \ 'p:package',
-"        \ 'i:imports:1',
-"        \ 'c:constants',
-"        \ 'v:variables',
-"        \ 't:types',
-"        \ 'n:interfaces',
-"        \ 'w:fields',
-"        \ 'e:embedded',
-"        \ 'm:methods',
-"        \ 'r:constructor',
-"        \ 'f:functions'
-"    \ ],
-"    \ 'sro' : '.',
-"    \ 'kind2scope' : {
-"        \ 't' : 'ctype',
-"        \ 'n' : 'ntype'
-"    \ },
-"    \ 'scope2kind' : {
-"        \ 'ctype' : 't',
-"        \ 'ntype' : 'n'
-"    \ },
-"    \ 'ctagsbin'  : 'gotags',
-"    \ 'ctagsargs' : '-sort -silent'
-"    \ }
-"
-"map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-"map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-"nmap <F8> :TagbarToggle<CR>
-
 " rust changes
 
 let g:rustfmt_command = '/Users/sudarshan/.cargo/bin/rustfmt'
