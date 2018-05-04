@@ -4,7 +4,6 @@ filetype off                  " required
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
-
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'scrooloose/nerdtree'
 Plug 'kien/ctrlp.vim'
@@ -12,21 +11,28 @@ Plug 'vim-airline/vim-airline'
 Plug 'airblade/vim-gitgutter'
 Plug 'mileszs/ack.vim'
 Plug 'flazz/vim-colorschemes'
-Plug 'rust-lang/rust.vim'
-Plug 'timonv/vim-cargo'
-Plug 'racer-rust/vim-racer'
 Plug 'jacoborus/tender.vim'
-Plug 'fatih/vim-go'
-Plug 'vim-syntastic/syntastic'
+Plug 'w0rp/ale'
 Plug 'Konfekt/FastFold'
 Plug 'tmhedberg/SimpylFold'
 Plug 'vim-scripts/indentpython.vim'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'roxma/nvim-yarp'
 Plug 'Shougo/deoplete.nvim'
+Plug 'tell-k/vim-autopep8'
+
+"go
 Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'fatih/vim-go'
+
+"rust
+Plug 'rust-lang/rust.vim'
+Plug 'timonv/vim-cargo'
+Plug 'racer-rust/vim-racer'
+
 "python
 Plug 'zchee/deoplete-jedi'
+Plug 'nvie/vim-flake8'
 
 " Initialize plugin system
 call plug#end()
@@ -114,20 +120,26 @@ set colorcolumn=80
 hi ColorColumn ctermbg=235
 
 "Syntastic settings
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
 "ale settings
-"let g:airline#extensions#ale#enabled = 1
-"let g:ale_open_list = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_open_list = 1
 "let g:ale_linters = {'go' : 'all'}
 "let g:ale_lint_on_enter = 1
+let g:ale_linters = {'go': ['gobuild', 'go vet', 'golint', 'gofmt'], "python": ['flake8', 'pylint']}
+let b:ale_fixers = ['autopep8']
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_list_window_size = 3
 
 "mac clipboard support
 set clipboard=unnamed
@@ -151,11 +163,11 @@ au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
 au FileType go nmap <leader>t <Plug>(go-test)
 
-let g:syntastic_loc_list_height=3
+"let g:syntastic_loc_list_height=3
 
 " Lint and Vet on save
-let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
-let g:syntastic_go_checkers = ['go', 'golint', 'errcheck', 'govet', 'gotest']
+" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+"let g:syntastic_go_checkers = ['go', 'golint', 'errcheck', 'govet', 'gotest']
 
 syntax enable  
 filetype plugin on  
@@ -168,13 +180,6 @@ let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1  
 let g:go_highlight_operators = 1  
 let g:go_highlight_build_constraints = 1  
-
-"" Use neocomplete.
-"let g:neocomplete#enable_at_startup = 1
-"" Use smartcase.
-"let g:neocomplete#enable_smart_case = 1
-"" Set minimum syntax keyword length.
-"let g:neocomplete#sources#syntax#min_keyword_length = 3
 
 " Use deoplete
 let g:deoplete#enable_at_startup = 1
@@ -192,7 +197,7 @@ let g:rustfmt_command = "cargo fmt -- "
 let g:rustfmt_autosave = 1 " format Rust files on save
 let g:rustfmt_fail_silently = 1 " else rustfmt will bring cursor to bottom of window on syntax failure
 
-let g:syntastic_rust_checkers = ['cargo']
+"let g:syntastic_rust_checkers = ['cargo']
 
 let g:racer_cmd = "/Users/sudarshan/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
@@ -212,3 +217,6 @@ au BufNewFile,BufRead *.py
     \ set expandtab |
     \ set autoindent |
     \ set fileformat=unix
+
+au BufNewFile,BufRead *.py let python_highlight_all=1
+"let g:syntastic_python_checkers=['flake8']
