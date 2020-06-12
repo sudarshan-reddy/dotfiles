@@ -17,7 +17,7 @@ export RUST_SRC_PATH="/Users/sudarsan/.rustup/toolchains/stable-x86_64-apple-dar
 export RUSTPATH=$HOME/dev/rust
 export GOPATH=$HOME/dev/go
 export GOZ=$HOME/dev/go/src/github.com/zalora
-export GOSRC=/usr/local/Cellar/go/1.12.5/libexec/
+export GOSRC=/usr/local/Cellar/go/1.14/libexec/
 export PATH=$PATH:$RUSTBIN:$GOPATH/bin
 export PATH=$PATH:/usr/local/sbin/
 export PATH="/usr/local/opt/e2fsprogs/bin:$PATH"
@@ -27,7 +27,7 @@ export PATH="/usr/local/opt/gettext/bin:$PATH"
 export PATH="/users/sudarsan/bin/:$PATH"
 
 # alias vim=nvim
-alias vim=/usr/local/Cellar/vim/8.1.1300/bin/vim
+alias vim=/usr/local/Cellar/vim/8.2.0950/bin/vim
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 
 # added by Miniconda3 4.5.12 installer
@@ -47,3 +47,14 @@ fi
 unset __conda_setup
 # <<< conda init <<<
 export PATH="/usr/local/opt/thrift@0.9.1/bin:$PATH"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+source "/Users/sudarsan/miniconda3/bin/virtualenvwrapper.sh"
+export WORKON_HOME="~/dev/PYTHON_ENVS"
+
+export AWS_PROFILE="s2-api"
+
+# added by travis gem
+[ -f /Users/sudarsan/.travis/travis.sh ] && source /Users/sudarsan/.travis/travis.sh

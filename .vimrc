@@ -12,10 +12,11 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mileszs/ack.vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'jacoborus/tender.vim'
-Plug 'joshdick/onedark.vim'
+Plug 'morhetz/gruvbox'
+Plug 'dense-analysis/ale'
 
 "go
-Plug 'myitcv/govim'
+Plug 'fatih/vim-go'
 
 "rust
 Plug 'rust-lang/rust.vim'
@@ -26,6 +27,9 @@ Plug 'racer-rust/vim-racer'
 "Plug 'nvie/vim-flake8'
 "Plug 'tell-k/vim-autopep8'
 "Plug 'vim-scripts/indentpython.vim'
+
+"cpp
+Plug 'derekwyatt/vim-fswitch'
 
 " Initialize plugin system
 call plug#end()
@@ -94,11 +98,9 @@ filetype plugin indent on
 set t_Co=256
 syntax enable
 
-if (has("termguicolors"))
- set termguicolors
-endif
 "colorscheme vividchalk
 
+set termguicolors
 let g:gruvbox_italic=1
 let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
@@ -118,24 +120,28 @@ set clipboard=unnamed
 
 let g:airline#extensions#ale#enabled = 1
 let g:ale_open_list = 1
-let g:ale_lint_on_save = 1
+"let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
+let g:ale_go_langserver_executable = 'gopls'
 
 "GO specific changes
 
 " format with goimports instead of gofmt
 let g:go_fmt_command = "goimports"
 
+au FileType go set omnifunc=go#complete#Complete
 au FileType go set noexpandtab
 au FileType go set tw=120
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
 au FileType go nmap <leader>t <Plug>(go-test)
 
-"let g:syntastic_loc_list_height=3
+let g:go_info_mode = 'gopls'
+let g:go_def_mode = 'gopls'
+
 
 " Lint and Vet on save
-" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 "let g:syntastic_go_checkers = ['go', 'golint', 'errcheck', 'govet', 'gotest']
 
 syntax enable  
@@ -149,15 +155,16 @@ let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1  
 let g:go_highlight_operators = 1  
 let g:go_highlight_build_constraints = 1  
-
+let b:vcm_tab_complete = 1
 
 
 "let g:rustfmt_command = '/Users/sudarshan/.cargo/bin/rustfmt'
 "let g:rustfmt_command = "cargo fmt -- "
 let g:rustfmt_autosave = 1 " format Rust files on save
 let g:rustfmt_fail_silently = 1 " else rustfmt will bring cursor to bottom of window on syntax failure
+"let g:ale_linters = {'rust': ['rls']}
 
-"let g:syntastic_rust_checkers = ['cargo']
+let g:syntastic_rust_checkers = ['cargo']
 
 let g:racer_cmd = "/Users/sudarsan/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
